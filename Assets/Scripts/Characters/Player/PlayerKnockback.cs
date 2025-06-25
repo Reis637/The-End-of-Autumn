@@ -32,6 +32,8 @@ public class PlayerKnockback : MonoBehaviour
     {
         if (direction == Vector2.zero) return;
 
+        if (health.IsImmune) return;
+
         pushStartPos = rb.position;
         pushTargetPos = rb.position + direction.normalized * stats.knockbackDistance;
         pushTimer = stats.pushDuration;

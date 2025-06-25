@@ -2,22 +2,30 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public GameObject prefab;
+    // Ahora puedes arrastrar el prefab de WindProjectile o ExplodeProjectile aquí
+    public GameObject currentProjectilePrefab;
 
-    private float lastAttackTime = -Mathf.Infinity;
-    private PlayerAnim anim;
+    private float _lastAttackTime = -Mathf.Infinity;
+    private PlayerAnim _anim;
 
     void Start()
     {
-        anim = GetComponent<PlayerAnim>();
+        _anim = GetComponent<PlayerAnim>();
     }
 
     void Update()
     {
-        var stats = PlayerCore.Instance.Stats;  
+        var stats = PlayerCore.Instance.Stats;
         var health = PlayerCore.Instance.Health;
 
-        if (Input.GetMouseButton(0) && Time.time >= lastAttackTime + stats.attackCooldown && !health.IsDead)
+        // Asegúrate de que currentProjectilePrefab esté asignado
+        if (currentProjectilePrefab == null)
+        {
+            Debug.LogError("Projectile Prefab is not assigned in PlayerAttack!");
+            return;
+        }
+
+        if (Input.GetMouseButton(0) && Time.time >= _lastAttackTime + stats.attackCooldown && !health.IsDead)
         {
             Attack();
         }
@@ -31,18 +39,20 @@ public class PlayerAttack : MonoBehaviour
         mouseWorldPos.z = 0;
         Vector3 direction = (mouseWorldPos - transform.position).normalized;
 
-        GameObject projectile = Instantiate(prefab, transform.position, Quaternion.identity);
+        GameObject projectileGO = Instantiate(currentProjectilePrefab, transform.position, Quaternion.identity);
 
-        WindProjectile wp = projectile.GetComponent<WindProjectile>();
-        if (wp != null)
+        Projectile projectile = projectileGO.GetComponent<Projectile>();
+        if (projectile != null)
         {
-            wp.speed = stats.projectileSpeed;
-            wp.maxTime = stats.projectileLifetime;
-            wp.damage = stats.attackDamage;
-            wp.SetDirection(direction);
+            projectile.Initialize(stats.projectileSpeed, stats.projectileLifetime, stats.attackDamage, direction);
+        }
+        else
+        {
+            Debug.LogError("El prefab asignado no tiene un componente BaseProjectile o derivado.");
+            Destroy(projectileGO);
         }
 
-        anim.PlayAttack();
-        lastAttackTime = Time.time;
+        _anim.PlayAttack();
+        _lastAttackTime = Time.time;
     }
 }

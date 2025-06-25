@@ -8,6 +8,8 @@ public class SnowflakeIA : MonoBehaviour
     private bool isDead = false;
     private SnowflakeAnim anim;
 
+    public int Damage => stats.damage;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -20,7 +22,9 @@ public class SnowflakeIA : MonoBehaviour
     {
         if (isDead || player == null) return;
 
-        Vector2 dir = (player.position - transform.position).normalized;
+        Vector2 playerPos2D = new(player.position.x, player.position.y);
+        Vector2 dir = (playerPos2D - rb.position).normalized;
+
         rb.MovePosition(rb.position + stats.moveSpeed * Time.deltaTime * dir);
     }
 
@@ -40,41 +44,11 @@ public class SnowflakeIA : MonoBehaviour
     {
         isDead = true;
         rb.linearVelocity = Vector2.zero;
-        anim.PlayDeath();
-        Destroy(gameObject, 1.5f);
-    }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (isDead) return;
-        if (col.gameObject.CompareTag("Player"))
-        {
-            PlayerHealth health = col.gameObject.GetComponent<PlayerHealth>();
-            if (health != null)
-            {
-                health.TakeDamage(stats.damage);
-            }
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
 
-            PlayerKnockback knockback = col.gameObject.GetComponent<PlayerKnockback>();
-            if (knockback != null)
-            {
-                Vector2 dir = (col.transform.position - transform.position).normalized;
-                knockback.ApplyKnockback(dir);
-            }
-        }
-
-
-        if (col.gameObject.CompareTag("PlayerProyectile"))
-        {
-
-            WindProjectile proyectile = col.gameObject.GetComponent<WindProjectile>();
-
-
-
-            if (proyectile != null)
-            {
-                TakeDamage(proyectile.damage);
-            }
-        }
+        float deathDuration = anim.PlayDeath();
+        Destroy(gameObject, deathDuration);
     }
 }

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1112254862511151920}
   m_Layer: 0
   m_Name: Snowflake
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,6 +128,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 6588529505070815418}
+  spriteRenderer: {fileID: 5025185874102641055}
+  idle: {fileID: 7400000, guid: 102727291098ee541b61d75df7f7b137, type: 2}
+  death: {fileID: 7400000, guid: 263053402535ef7458cfbfe3eac255cf, type: 2}
 --- !u!114 &8146971621591758293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e87dc3bae9fd04cbe331a3365c07dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dodo: 0
 --- !u!114 &2375764270652150259
 MonoBehaviour:
   m_ObjectHideFlags: 0

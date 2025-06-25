@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class PlayerStats : MonoBehaviour
 {
     [Header("Health")]
@@ -19,4 +20,10 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Damage")]
     public float immunityDuration = 0.5f;
+
+    [Header("Dash")]
+    public float dashSpeedMultiplier = 2.5f;
+    public float dashDuration = 0.4f;
+    public float dashCooldown = 1.2f;
+    public float afterImageInterval = 0.1f;
 }
