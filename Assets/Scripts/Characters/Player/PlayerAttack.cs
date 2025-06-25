@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    // Ahora puedes arrastrar el prefab de WindProjectile o ExplodeProjectile aquí
     public GameObject currentProjectilePrefab;
 
     private float _lastAttackTime = -Mathf.Infinity;
@@ -18,7 +17,6 @@ public class PlayerAttack : MonoBehaviour
         var stats = PlayerCore.Instance.Stats;
         var health = PlayerCore.Instance.Health;
 
-        // Asegúrate de que currentProjectilePrefab esté asignado
         if (currentProjectilePrefab == null)
         {
             Debug.LogError("Projectile Prefab is not assigned in PlayerAttack!");

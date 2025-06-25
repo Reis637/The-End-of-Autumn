@@ -33,7 +33,8 @@ public class WindProjectile : Projectile
 
         if (_enemiesPierced > pierceCount)
         {
-            Destroy(gameObject);
+            explosion.Play();
+            OnLifetimeEnd();
         }
     }
 

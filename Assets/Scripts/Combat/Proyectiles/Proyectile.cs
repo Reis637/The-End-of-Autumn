@@ -12,6 +12,8 @@ public abstract class Projectile : MonoBehaviour
 
     private ParticleSystem trail;
 
+    protected ParticleSystem explosion;
+
     public virtual void Initialize(float speed, float maxTime, int damage, Vector3 direction)
     {
         Speed = speed;
@@ -28,7 +30,13 @@ public abstract class Projectile : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
-        trail = GetComponentInChildren<ParticleSystem>();
+        Transform particleTrail = transform.Find("Trail");
+
+        trail = particleTrail.GetComponent<ParticleSystem>();
+
+        Transform particleExplosion = transform.Find("Explosion");
+
+        explosion = particleExplosion.GetComponent<ParticleSystem>();
     }
 
     protected virtual void Start()
@@ -61,6 +69,12 @@ public abstract class Projectile : MonoBehaviour
             trail.transform.parent = null;
             trail.Stop();
             Destroy(trail.gameObject, trail.main.duration + trail.main.startLifetime.constantMax);
+        }
+
+        if (explosion != null)
+        {
+            explosion.transform.parent = null;
+            Destroy(explosion.gameObject, explosion.main.duration + explosion.main.startLifetime.constantMax);
         }
 
         Destroy(gameObject);
